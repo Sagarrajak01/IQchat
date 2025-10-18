@@ -4,3 +4,4 @@ matplotlib
 emoji
 wordcloud
 urlextract
+seaborn
