@@ -44,10 +44,12 @@ pip install -r requirements.txt
 # 4. Run the app
 streamlit run app.py
 ```
+
 ---
 
 ## 🗂️ Project Structure
 
+```
 📁 Whatsapp-chat-analysis/
 ├── app.py
 ├── helper.py
@@ -55,17 +57,23 @@ streamlit run app.py
 ├── requirements.txt
 ├── README.md
 └── .gitignore
+```
 
+---
 
-📊 Example Output
-Total messages and words
-Most active users
-Word cloud of frequently used words
-Number of links and media messages
-Emoji analysis showing most used emojis with pie chart and counts 🧠
+## 📊 Example Output
 
-🧠 Future Improvements
-Sentiment analysis per user
-Chat timeline visualization
-Enhanced emoji color analytics
-User interaction graph using NetworkX
+* Total messages and words
+* Most active users
+* Word cloud of frequently used words
+* Number of links and media messages
+* Emoji analysis showing most used emojis with pie chart and counts 🧠
+
+---
+
+## 🧠 Future Improvements
+
+* Sentiment analysis per user
+* Chat timeline visualization
+* Enhanced emoji color analytics
+* User interaction graph using **NetworkX**
