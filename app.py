@@ -17,8 +17,9 @@ if uploaded_file is not None:
 
     # Fetch unique users
     user_list = df['user'].unique().tolist()
-    user_list.remove('group_notification')
-    user_list.remove('Meta AI')
+    for unwanted in ['group_notification', 'Meta AI']:
+        if unwanted in user_list:
+            user_list.remove(unwanted)
     user_list.sort()
     user_list.insert(0, "Overall")
 
