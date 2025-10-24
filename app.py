@@ -57,9 +57,8 @@ if uploaded_file is not None:
         # Preprocess the data
         df = preprocessor.preprocess(data)
 
-        # Validation check after preprocessing
         if df is None or df.empty or 'user' not in df.columns:
-            st.error("❌ Could not read valid chat data from file. Make sure you exported correctly.")
+            st.error("Could not read valid chat data from file. Make sure you exported correctly.")
             st.stop()
 
         # Prepare user list for selection
@@ -172,38 +171,29 @@ if uploaded_file is not None:
             if selected_user == "Overall":
                 st.title("Most Busy User")
                 try:
-                    # x is for the bar chart (count), new_df is for the percentage table
                     x, new_df = helper.most_busy_users(df)
                     
                     if not new_df.empty:
                         col1, col2 = st.columns(2)
-                        
-                        # --- IMPROVED BAR CHART (col1) ---
+                    
                         with col1:
                             st.subheader("Top 5 Users (Message Count)")
-                            # NOTE: For better visualization, consider plotting new_df['percent'] vs new_df['Name']
-                            fig, ax = plt.subplots(figsize=(6, 4)) # Adjust size for column
+                            fig, ax = plt.subplots(figsize=(6, 4)) 
                             ax.bar(x.index, x.values)
                             plt.xticks(rotation=90)
                             st.pyplot(fig)
-                            plt.close(fig) # Always close plot figures
+                            plt.close(fig)
 
-                        # --- IMPROVED TABLE (col2) ---
                         with col2:
                             st.subheader("Message Share (%)")
-                            
-                            # 1. Create a 1-based Rank column (or directly set the index)
-                            # Ensure we only work with the top 10 users for display
                             df_display = new_df.head(10).copy()
                             df_display.index = pd.RangeIndex(1, len(df_display) + 1)
-                            df_display.index.name = "Rank" # Add a name to the index column
+                            df_display.index.name = "Rank" 
                             
                             st.dataframe(
                                 df_display
                                     .style
-                                    # Format the 'percent' column to include '%' and two decimals
                                     .format({'percent': "{:.2f}%"}) 
-                                    # Add a subtle border/outline to the cells
                                     .set_properties(**{'border': '1px solid #E0E0E0', 
                                                     'padding': '8px'}),
                                 use_container_width=True, 
