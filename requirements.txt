@@ -5,3 +5,4 @@ emoji
 wordcloud
 urlextract
 seaborn
+numpy

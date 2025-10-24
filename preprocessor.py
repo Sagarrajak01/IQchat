@@ -1,52 +1,50 @@
 import re
 import pandas as pd
+import numpy as np
 
 def preprocess(data):
+    data = data.translate({ord('\u200e'): None, ord('\ufeff'): None}).strip()
+    pattern = r'(\d{1,2}/\d{1,2}/\d{2,4},?\s\d{1,2}:\d{2}\s?[APap][Mm]\s-\s)'
+    messages = re.split(pattern, data)
+    
+    if len(messages) < 3:
+        return pd.DataFrame() 
 
-    pattern = r'\d{2}/\d{2}/\d{2},\s\d{1,2}:\d{2}\s[ap]m\s-\s'
-    message = re.split(pattern, data)[1:]
-    date = re.findall(pattern, data)
-    date = [d.strip(' -') for d in date]
+    dates = [d.strip(' -') for d in messages[1::2]]
+    messages_raw = messages[2::2]
+    
+    df = pd.DataFrame({'user_message': messages_raw, 'message_date': dates})
+    df['date'] = pd.to_datetime(
+        df['message_date'], 
+        format='mixed', 
+        dayfirst=True,
+        errors='coerce'
+    )
+    
+    df.drop(columns=['message_date'], inplace=True)
+    df.dropna(subset=['date'], inplace=True)
+    if df.empty:
+        return pd.DataFrame()
 
-    df = pd.DataFrame({'user_message': message, 'message_date': date})
-    df['message_date'] = pd.to_datetime(df['message_date'], format='%d/%m/%y, %I:%M %p')
-    df.rename(columns={'message_date': 'date'}, inplace=True)
+    pattern_user_msg = r'^([^:]+?):\s(.*)$'
+    extracted = df['user_message'].str.extract(pattern_user_msg, expand=True)
 
-    users = []
-    messages = []
-
-    for text in df['user_message']:
-        if ':' in text:
-            user, msg = text.split(':', 1)
-            users.append(user)
-            messages.append(msg.strip())
-        else:
-            users.append('group_notification')
-            messages.append(text.strip())
-
-    df['user'] = users
-    df['message'] = messages
+    df['user'] = extracted[0].fillna('group_notification').str.strip()
+    df['message'] = extracted[1].fillna(df['user_message']).str.strip()
     df.drop(columns=['user_message'], inplace=True)
-
-    df['year'] = df['date'].dt.year
-    df['month_num'] = df['date'].dt.month
+    df['year'] = df['date'].dt.year.astype('Int64')
+    df['month_num'] = df['date'].dt.month.astype('Int64')
     df['month'] = df['date'].dt.month_name()
-    df['day'] = df['date'].dt.day
-    df['hour'] = df['date'].dt.hour
-    df['minute'] = df['date'].dt.minute
-    df['only_date'] = df['date'].dt.date 
+    df['day'] = df['date'].dt.day.astype('Int64')
+    df['hour'] = df['date'].dt.hour.astype('Int64')
+    df['minute'] = df['date'].dt.minute.astype('Int64')
+    df['only_date'] = df['date'].dt.date
     df['day_name'] = df['date'].dt.day_name()
-    
-    period = []
-    for hour in df[['day_name', 'hour']]['hour']:
-        if hour == 23:
-            period.append(str(hour) + "-" + str('00'))
-        elif hour == 0:
-            period.append(str('00') + "-" + str(hour + 1))
-        else:
-            period.append(str(hour) + "-" + str(hour + 1))
-            
-    df['peroid'] = period
-    
-    return df
 
+    df['period'] = np.where(
+        pd.isna(df['hour']),
+        "Unknown",
+        df['hour'].astype(str).str.zfill(2) + '-' + 
+        ((df['hour'] + 1) % 24).astype(str).str.zfill(2)
+    )
+    return df.reset_index(drop=True)
