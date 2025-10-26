@@ -1,6 +1,6 @@
 # Ignore chat export files
 chat.txt
-
+report.docx
 # Python
 __pycache__/
 *.pyc

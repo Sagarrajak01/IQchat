@@ -15,7 +15,7 @@ def load_css(file_path):
         with open(file_path) as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
     except FileNotFoundError:
-        st.warning("⚠️ CSS file not found. The app will still run, but without custom styling.")
+        st.warning("CSS file not found.")
 
 load_css("style.css")
 
@@ -50,18 +50,18 @@ uploaded_file = st.sidebar.file_uploader("Choose a WhatsApp txt file", type=["tx
 
 if uploaded_file is not None:
     try:
-        # Read and decode the file data
+        # Read and decode file
         bytes_data = uploaded_file.getvalue()
         data = bytes_data.decode('utf-8', errors='ignore')
         
-        # Preprocess the data
+        # Preprocess
         df = preprocessor.preprocess(data)
 
         if df is None or df.empty or 'user' not in df.columns:
             st.error("Could not read valid chat data from file. Make sure you exported correctly.")
             st.stop()
 
-        # Prepare user list for selection
+        # Prepare user list
         user_list = df['user'].dropna().unique().tolist()
         for unwanted in ['group_notification', 'Meta AI']:
             if unwanted in user_list:
@@ -71,12 +71,11 @@ if uploaded_file is not None:
 
         # Sidebar selection
         selected_user = st.sidebar.selectbox("Show analysis wrt", user_list)
-
-        # Analysis button
+        
         if st.sidebar.button("Analyze"):
             st.title("Top Statistics")
             
-            # 1. Fetch Top Statistics
+            # 1. Top Statistics
             try:
                 num_messages, words, num_media_msg, links = helper.fetch_stats(selected_user, df)
             except Exception as e:
@@ -218,7 +217,7 @@ if uploaded_file is not None:
             except Exception as e:
                 st.warning(f"Word cloud error: {e}")
 
-            # 8. Most Common Words (Bar Chart)
+            # 8. Most Common Words
             st.title("Most Common Words")
             try:
                 most_common_df = helper.most_common_words(selected_user, df)
@@ -243,7 +242,7 @@ if uploaded_file is not None:
                     col_left1, col_left2 = st.columns(2)
                     half = len(emoji_df) // 2 + len(emoji_df) % 2
                     
-                    # Display emojis and counts
+                    # Emojis list
                     with col_left1:
                         for i, row in emoji_df.iloc[:half].iterrows():
                             st.markdown(f"<span style='font-size:20px'>{row[0]}</span> {row[1]}", unsafe_allow_html=True)
@@ -251,7 +250,7 @@ if uploaded_file is not None:
                         for i, row in emoji_df.iloc[half:].iterrows():
                             st.markdown(f"<span style='font-size:20px'>{row[0]}</span> {row[1]}", unsafe_allow_html=True)
                     
-                    # Display Pie Chart
+                    # Pie Chart
                     fig, ax = plt.subplots()
                     ax.pie(emoji_df[1], labels=emoji_df[0],
                             startangle=90, autopct='%1.1f%%',
