@@ -1,21 +1,21 @@
-# 💬 WhatsApp Chat Analyzer
+# IQchat - WhatsApp Chat Analysis
 
 A Streamlit web app that analyzes WhatsApp chat exports to generate insights such as message count, word frequency, media usage, active users, and word clouds.
 
 ---
 
-## 🚀 Features
+## Features
 
 * View overall or per-user chat statistics
 * Generate a word cloud for message content
 * Identify the most active users
 * Analyze text vs media messages
 * Detect shared links automatically
-* Emoji analysis with colorful visual charts 🎨
+* Emoji analysis with colorful visual charts 
 
 ---
 
-## 🧩 Tech Stack
+## Tech Stack
 
 * **Python 3.10+**
 * **Streamlit** for web UI
@@ -47,10 +47,10 @@ streamlit run app.py
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
-📁 Whatsapp-chat-analysis/
+Whatsapp-chat-analysis/
 ├── app.py
 ├── helper.py
 ├── preprocessor.py
@@ -61,19 +61,25 @@ streamlit run app.py
 
 ---
 
-## 📊 Example Output
+## Example Output
 
 * Total messages and words
 * Most active users
 * Word cloud of frequently used words
 * Number of links and media messages
-* Emoji analysis showing most used emojis with pie chart and counts 🧠
+* Emoji analysis showing most used emojis with pie chart and counts 
 
 ---
 
-## 🧠 Future Improvements
+## Future Improvements
 
 * Sentiment analysis per user
 * Chat timeline visualization
 * Enhanced emoji color analytics
 * User interaction graph using **NetworkX**
+
+---
+
+## Acknowledgements
+Special thanks to Sushil Kumar for guidance and support on this project.
+
