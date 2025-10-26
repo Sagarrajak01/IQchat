@@ -1,4 +1,4 @@
-# IQchat - WhatsApp Chat Analysis
+# IQchat
 
 A Streamlit web app to explore and visualize WhatsApp chat data. IQchat helps you gain insights into your chats, including message statistics, media usage, most active users, and emoji trends.
 
