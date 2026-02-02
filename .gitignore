@@ -1,7 +1,3 @@
-# Ignore chat export files
-chat.txt
-report.docx
-# Python
 __pycache__/
 *.pyc
 *.pyo
@@ -10,14 +6,8 @@ __pycache__/
 venv/
 env/
 *.log
-
-# Streamlit cache
-.streamlit/
-
-# IDEs and editors
+.streamlit/secrets.toml
 .vscode/
 .idea/
-
-# OS-specific files
 .DS_Store
 Thumbs.db
