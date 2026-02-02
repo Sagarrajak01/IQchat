@@ -77,8 +77,3 @@ Whatsapp-chat-analysis/
 * Enhanced emoji color analytics
 * User interaction graph using **NetworkX**
 
----
-
-## Acknowledgements
-
-This project was developed under the guidance of **Mr. Sushil Kumar, NIT Trichy**. Special thanks for valuable insights and support throughout the project.
